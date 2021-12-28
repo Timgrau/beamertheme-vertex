@@ -5,6 +5,7 @@
 
 - `\usetheme[simplefootline]{vertex}` - use a simpler footline
 - `\usetheme[totalframes]{vertex}` - show total number of slides
+- `\usetheme[hexcount]{vertex}` - hexadecimal page numbers
 
 ## Title page
 ![title page](./demo.png)

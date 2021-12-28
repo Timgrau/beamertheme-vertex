@@ -10,11 +10,21 @@
 \newif\if@customcolor\@customcolorfalse
 \newif\if@dark\@darkfalse
 \newif\if@totalframes\@totalframesfalse
+\newif\if@hexcount\@hexcountfalse
+
+\DeclareOption{hexcount}{\@hexcounttrue}
 \DeclareOption{simplefootline}{\@simplefootlinetrue}
 \DeclareOption{dark}{\@darktrue}
 \DeclareOption{totalframes}{\@totalframestrue}
 \DeclareOption*{\@customcolortrue\colorlet{mainColor}{\CurrentOption}}
 \ProcessOptions
+\usepackage{luacode}
+
+%%%-  Load (hexa.lua) script -%%%
+\directlua{hexa = require('hexa')}
+\newcommand*{\hexaPage}[1]{%
+  \directlua{hexa.printHex("\luaescapestring{#1}")}
+}%
 
 % Table of contents
 \useoutertheme[subsection=true,shadow]{miniframes}
@@ -199,7 +209,10 @@
 \if@simplefootline%
   \hfill
   \begin{beamercolorbox}[wd=0.2\paperwidth, ht=2.5ex, dp=1ex, right, rightskip=1em]{page number in head/foot}%
-    \strut\insertframenumber{}\if@totalframes /\inserttotalframenumber{}\fi%
+    \if@hexcount\strut\hexaPage{\insertframenumber} \if@totalframes / \hexaPage{\inserttotalframenumber}\fi
+    \else
+    \strut\insertframenumber{}\if@totalframes / \inserttotalframenumber{}\fi
+    \fi%
   \end{beamercolorbox}%
 \else%
   \usebeamerfont{footline}%
@@ -220,7 +233,10 @@
       \fi%
     \end{beamercolorbox}%
     \begin{beamercolorbox}[wd=0.25\paperwidth, ht=2.5ex, dp=1ex, right, rightskip=1em]{page number in head/foot}%
-      \strut\insertframenumber{}\if@totalframes / \inserttotalframenumber{}\fi%
+      \if@hexcount\strut\hexaPage{\insertframenumber} \if@totalframes / \hexaPage{\inserttotalframenumber}\fi
+    \else
+    \strut\insertframenumber{}\if@totalframes / \inserttotalframenumber{}\fi
+    \fi%
     \end{beamercolorbox}%
   \end{beamercolorbox}%
 \fi%
